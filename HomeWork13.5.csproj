@@ -66,10 +66,14 @@
     <Compile Include="BankSystem\Bank.cs" />
     <Compile Include="BankSystem\BankAccounts\BankAccount.cs" />
     <Compile Include="BankSystem\BankAccounts\DepositAccount.cs" />
+    <Compile Include="BankSystem\BankAccounts\Interfaces\IMoneyTransfer.cs" />
+    <Compile Include="BankSystem\BankAccounts\Interfaces\IReplenishment.cs" />
+    <Compile Include="BankSystem\BankAccounts\Interfaces\IAddMoney.cs" />
+    <Compile Include="BankSystem\BankAccounts\Interfaces\ISubMoney.cs" />
     <Compile Include="BankSystem\BankAccounts\NoDepositAccount.cs" />
     <Compile Include="BankSystem\BankAccounts\TestAccount.cs" />
-    <Compile Include="BankSystem\BankClients\BankClient.cs" />
     <Compile Include="BankSystem\BankClients\Client.cs" />
+    <Compile Include="BankSystem\BankClients\BankClient.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>

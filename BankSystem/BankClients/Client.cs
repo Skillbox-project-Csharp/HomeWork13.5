@@ -5,22 +5,19 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace HomeWork13._5.BankSystem.BankClients
+namespace HomeWork13._5.BankSystem
 {
-    internal class Client : BankClient
+    internal abstract class Client
     {
-        public Client()
-        {
-            _Id = Guid.NewGuid();
-            _bankAccounts = new List<BankAccount>();
-            Name = string.Empty;
-            SurName = string.Empty;
-            Patronymic = string.Empty;
-        }
-        public override Guid Id => _Id;
-        public override List<BankAccount> BankAccounts => _bankAccounts;
-        public override string Name { get => _name; set => _name = value; }
-        public override string SurName { get => _surName; set => _surName = value; }
-        public override string Patronymic { get => _patronymic; set => _patronymic = value; }
-        }
+        protected Guid _Id;
+        protected List<BankAccount> _bankAccounts;
+        protected string _name;
+        protected string _surName;
+        protected string _patronymic;
+        abstract public Guid Id { get; }
+        abstract public string Name { get; set;}
+        abstract public string SurName { get; set; }
+        abstract public string Patronymic { get; set; }
+        abstract public List<BankAccount> BankAccounts { get;}
+    }
 }

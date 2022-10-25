@@ -8,22 +8,15 @@ namespace HomeWork13._5.BankSystem.BankAccounts
 {
     internal class TestAccount: BankAccount
     {
-        public override double Rub => _rub;
 
-        public override Guid Id => _id;
-
-        public TestAccount()
-        {
-            _rub = 100;
-            _id = Guid.NewGuid();
-        }
+        public TestAccount(Guid id, double money) : base(id, money) { }
         public override bool AddMoney(double value)
         {
             if (value <= 0)
                 return false;
-            if (Rub + value > 0)
+            if (Money + value > 0)
             {
-                _rub += value;
+                _money += value;
                 return true;
             }
             return false;
@@ -33,17 +26,13 @@ namespace HomeWork13._5.BankSystem.BankAccounts
         {
             if (value <= 0)
                 return false;
-            if (Rub - value >= 0)
+            if (Money - value >= 0)
             {
-                _rub -= value;
+                _money -= value;
                 return true;
             }
             return false;
         }
 
-        public bool Equals(BankAccount other)
-        {
-            return Id == other.Id ? true : false;
-        }
     }
 }

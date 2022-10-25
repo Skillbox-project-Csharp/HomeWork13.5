@@ -1,4 +1,5 @@
-﻿using System;
+﻿using HomeWork13._5.BankSystem.BankAccounts.Interfaces;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -6,24 +7,18 @@ using System.Threading.Tasks;
 
 namespace HomeWork13._5.BankSystem.BankAccounts
 {
-    internal class DepositAccount : BankAccount,IEquatable<BankAccount>
+    internal class DepositAccount : BankAccount, IReplenishment<BankAccount>, IMoneyTransfer<BankAccount>
     {
-        public override double Rub => _rub;
-
-        public override Guid Id => _id;
-
+        public DepositAccount(Guid id, double money) : base(id, money) { }
         public DepositAccount()
-        {
-            _rub = 0;
-            _id = Guid.NewGuid();
-        }
+            : base(Guid.NewGuid(), 0) { }
         public override bool AddMoney(double value)
         {
             if (value <= 0)
                 return false;
-            if (Rub + value > 0)
+            if (Money + value > 0)
             {
-                _rub += value;
+                _money += value;
                 return true;
             }
             return false;
@@ -34,9 +29,26 @@ namespace HomeWork13._5.BankSystem.BankAccounts
             return false;
         }
 
-        public bool Equals(BankAccount other)
+        public override BankAccount Replenishment(double value)
         {
-            return Id == other.Id ? true : false;
+            this.AddMoney(value);
+            return new BankAccount(this.Id, this.Money);
+        }
+
+        public override void MoneyTransferCov(Client recipient, BankAccount recipientAccount, double value)
+        {
+            int indexSenderAccount = recipient.BankAccounts.IndexOf(recipientAccount);
+            if (indexSenderAccount != -1)
+                if (!recipientAccount.Equals(this))
+                    if (this.SubMoney(value))
+                    {
+                        if (recipient.BankAccounts[indexSenderAccount].AddMoney(value)) { }
+                        else
+                        {
+                            this.AddMoney(value);
+
+                        }
+                    }
         }
     }
 }

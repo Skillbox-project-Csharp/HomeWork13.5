@@ -1,4 +1,5 @@
 ﻿using HomeWork13._5.BankSystem.BankAccounts;
+using HomeWork13._5.BankSystem.BankAccounts.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,7 +17,7 @@ namespace HomeWork13._5.BankSystem
         /// <param name="client">Клиент запросивший открытие</param>
         /// <param name="bankAccount">Новый банковский счет</param>
         /// <returns></returns>
-        public static bool OpenNewBankAccount<T>(BankClient client, T bankAccount)
+        public static bool OpenNewBankAccount<T>(Client client, T bankAccount)
             where T : BankAccount
         {
             if (client.BankAccounts.Count <= 2)
@@ -36,18 +37,17 @@ namespace HomeWork13._5.BankSystem
         /// <param name="client">Клиент запросивший закрытие</param>
         /// <param name="bankAccount">Акаунт</param>
         /// <returns></returns>
-        public static bool CloseBankAccount<T>(BankClient client, T bankAccount)
+        public static bool CloseBankAccount<T>(Client client, T bankAccount)
             where T : BankAccount
         {
             int indexAccount = client.BankAccounts.IndexOf(bankAccount);
             if (indexAccount != -1)
             {
-                if (!(client.BankAccounts[indexAccount] is DepositAccount))
-                    if (client.BankAccounts[indexAccount].Rub == 0)
-                    {
-                        client.BankAccounts.RemoveAt(indexAccount);
-                        return true;
-                    }
+                if (client.BankAccounts[indexAccount].Money == 0)
+                {
+                    client.BankAccounts.RemoveAt(indexAccount);
+                    return true;
+                }
             }
             return false;
         }
@@ -62,7 +62,7 @@ namespace HomeWork13._5.BankSystem
         /// <param name="recipientAccount">Счет получателя</param>
         /// <param name="value">Сумма перевода</param>
         /// <returns></returns>
-        public static bool MoneyTransfer<T, M>(BankClient sender, T senderAccount, BankClient recipient, M recipientAccount, double value)
+        public static bool MoneyTransfer<T, M>(Client sender, T senderAccount, Client recipient, M recipientAccount, double value)
             where T : BankAccount
             where M : BankAccount
         {
@@ -82,6 +82,54 @@ namespace HomeWork13._5.BankSystem
                     return false;
                 }
             }
+            else return false;
+        }
+        /// <summary>
+        /// Пополнение клиетского счета по типу 
+        /// </summary>
+        /// <param name="client"></param>
+        /// <param name="type"></param>
+        /// <param name="value"></param>
+        /// <returns></returns>
+        public static bool ReplenishmentByTypeAccount(Client client, Type type, double value)
+        {
+            IReplenishment<BankAccount> account;
+            foreach (var bankAccount in client.BankAccounts)
+                if (bankAccount.GetType().Equals(type))
+                {
+                    account = bankAccount;
+                    double money = bankAccount.Money;
+                    account.Replenishment(value);
+                    if (money != bankAccount.Money)
+                        return true;
+                    else return false;
+                }
+            return false;
+        }
+        /// <summary>
+        /// Перевод средств между счетами клиентов ковариатный
+        /// </summary>
+        /// <param name="sender">Отправитель средств</param>
+        /// <param name="senderAccount">Счет отправителя</param>
+        /// <param name="recipient">Получатель</param>
+        /// <param name="recipientAccount">Счет получателя</param>
+        /// <param name="value">Сумма перевода</param>
+        /// <returns></returns>
+        public static bool MoneyTransferCov(Client sender, BankAccount senderAccount, Client recipient, BankAccount recipientAccount, double value)
+        {
+            int indexSenderAccount = sender.BankAccounts.IndexOf(senderAccount);
+            int indexRecipientAccount = recipient.BankAccounts.IndexOf(recipientAccount);
+            if (indexSenderAccount == -1 || indexRecipientAccount == -1)
+                return false;
+            if (senderAccount.Equals(recipientAccount))
+                return false;
+
+            double beginMoney = senderAccount.Money;
+            IMoneyTransfer<BankAccount> transfer = senderAccount;
+            transfer.MoneyTransferCov(recipient, recipientAccount, value);
+
+            if (beginMoney != senderAccount.Money)
+                return true;
             else return false;
         }
     }

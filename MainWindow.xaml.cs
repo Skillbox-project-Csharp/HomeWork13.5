@@ -1,5 +1,6 @@
 ﻿using HomeWork13._5.BankSystem;
 using HomeWork13._5.BankSystem.BankAccounts;
+using HomeWork13._5.BankSystem.BankAccounts.Interfaces;
 using HomeWork13._5.BankSystem.BankClients;
 using System;
 using System.Collections.Generic;
@@ -24,15 +25,16 @@ namespace HomeWork13._5
     /// </summary>
     public partial class MainWindow : Window
     {
-         static void Prints(BankClient bankClient)
+         static void Prints(Client bankClient)
         {
             Debug.WriteLine(bankClient.Name);
             Debug.WriteLine(bankClient.SurName);
             Debug.WriteLine(bankClient.Patronymic);
             foreach(var account in bankClient.BankAccounts)
             {
+                Debug.WriteLine("\t" + account.GetType().Name);
                 Debug.WriteLine("\t"+account.Id.ToString());
-                Debug.WriteLine("\t" + account.Rub);
+                Debug.WriteLine("\t" + account.Money);
                 Debug.WriteLine("---------------------------------------------------------");
             }
             Debug.WriteLine("XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX");
@@ -41,7 +43,6 @@ namespace HomeWork13._5
         public MainWindow()
         {
             InitializeComponent();
-
         }
     }
 }

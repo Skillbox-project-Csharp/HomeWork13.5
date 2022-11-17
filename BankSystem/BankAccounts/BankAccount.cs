@@ -13,8 +13,9 @@ namespace HomeWork13._5.BankSystem.BankAccounts
         protected Guid _id;
 
         public double  Money => _money;
-
         public Guid Id => _id;
+        //костыль
+        public virtual Type TypeAccount { get; set; } = typeof(BankAccount);
 
         public BankAccount(Guid id, double money)
         {

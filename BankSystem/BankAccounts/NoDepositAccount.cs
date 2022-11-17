@@ -9,6 +9,8 @@ namespace HomeWork13._5.BankSystem.BankAccounts
 {
     internal class NoDepositAccount : BankAccount, IReplenishment<BankAccount>, IMoneyTransfer<BankAccount>
     {
+        //костыль
+        public override Type TypeAccount { get; set; } = typeof(DepositAccount);
         public NoDepositAccount(Guid id, double money) : base(id, money) { }
         public NoDepositAccount()
             : base(Guid.NewGuid(), 0) { }

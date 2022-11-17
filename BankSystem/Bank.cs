@@ -1,5 +1,6 @@
 ﻿using HomeWork13._5.BankSystem.BankAccounts;
 using HomeWork13._5.BankSystem.BankAccounts.Interfaces;
+using HomeWork13._5.BankSystem.BankClients;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -26,6 +27,8 @@ namespace HomeWork13._5.BankSystem
                     if (account.GetType().Equals(bankAccount.GetType()))
                         return false;
                 client.BankAccounts.Add(bankAccount);
+                if (client is BankClient bankClient)
+                    bankClient.OnPropertyChanged("BankAccounts");
                 return true;
             }
             return false;
@@ -46,6 +49,8 @@ namespace HomeWork13._5.BankSystem
                 if (client.BankAccounts[indexAccount].Money == 0)
                 {
                     client.BankAccounts.RemoveAt(indexAccount);
+                    if (client is BankClient bankClient)
+                        bankClient.OnPropertyChanged("BankAccounts");
                     return true;
                 }
             }
@@ -75,7 +80,13 @@ namespace HomeWork13._5.BankSystem
             if (sender.BankAccounts[indexSenderAccount].SubMoney(value))
             {
                 if (recipient.BankAccounts[indexRecipientAccount].AddMoney(value))
+                {
+                    if (sender is BankClient bankClient1)
+                        bankClient1.OnPropertyChanged("BankAccounts");
+                    if (recipient is BankClient bankClient2)
+                        bankClient2.OnPropertyChanged("BankAccounts");
                     return true;
+                }
                 else
                 {
                     sender.BankAccounts[indexSenderAccount].AddMoney(value);
@@ -100,8 +111,13 @@ namespace HomeWork13._5.BankSystem
                     account = bankAccount;
                     double money = bankAccount.Money;
                     account.Replenishment(value);
+
                     if (money != bankAccount.Money)
+                    {
+                        if (client is BankClient bankClient)
+                            bankClient.OnPropertyChanged("BankAccounts");
                         return true;
+                    }
                     else return false;
                 }
             return false;
@@ -129,7 +145,13 @@ namespace HomeWork13._5.BankSystem
             transfer.MoneyTransferCov(recipient, recipientAccount, value);
 
             if (beginMoney != senderAccount.Money)
+            {
+                if (sender is BankClient bankClient1)
+                    bankClient1.OnPropertyChanged("BankAccounts");
+                if (recipient is BankClient bankClient2)
+                    bankClient2.OnPropertyChanged("BankAccounts");
                 return true;
+            }
             else return false;
         }
     }

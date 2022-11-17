@@ -1,14 +1,48 @@
 ﻿using HomeWork13._5.BankSystem.BankAccounts;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
+using System.Diagnostics;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace HomeWork13._5.BankSystem.BankClients
 {
-    internal class BankClient : Client
+    internal class BankClient : Client, INotifyPropertyChanged
     {
+        public override Guid Id => _Id;
+        public override List<BankAccount> BankAccounts => _bankAccounts;
+        public override string Name
+        {
+            get => _name;
+            set
+            {
+                _name = value;
+                OnPropertyChanged();
+            }
+        }
+        public override string SurName
+        {
+            get => _surName;
+            set
+            {
+                _surName = value;
+                OnPropertyChanged();
+            }
+        }
+        public override string Patronymic
+        {
+            get => _patronymic;
+            set { 
+                _patronymic = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
         public BankClient()
         {
             _Id = Guid.NewGuid();
@@ -30,10 +64,10 @@ namespace HomeWork13._5.BankSystem.BankClients
             : this(name, surName, patronymic, Guid.NewGuid(), new List<BankAccount>()) { }
 
 
-        public override Guid Id => _Id;
-        public override List<BankAccount> BankAccounts => _bankAccounts;
-        public override string Name { get => _name; set => _name = value; }
-        public override string SurName { get => _surName; set => _surName = value; }
-        public override string Patronymic { get => _patronymic; set => _patronymic = value; }
+
+        public void OnPropertyChanged([CallerMemberName] string prop = "")
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(prop));
+        }
     }
 }

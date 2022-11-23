@@ -55,8 +55,11 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="ReplenishmentAccount.xaml.cs">
-      <DependentUpon>ReplenishmentAccount.xaml</DependentUpon>
+    <Compile Include="OpenAccountWindow.xaml.cs">
+      <DependentUpon>OpenAccountWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="ReplenishmentWindow.xaml.cs">
+      <DependentUpon>ReplenishmentWindow.xaml</DependentUpon>
     </Compile>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
@@ -80,7 +83,15 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Page Include="ReplenishmentAccount.xaml">
+    <Page Include="OpenAccountWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="ReplenishmentWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Resources\Styles.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

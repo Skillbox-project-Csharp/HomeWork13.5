@@ -29,12 +29,13 @@
                      x:Name="ListBoxDataClients1"
                      SelectionMode="Single"
                      SelectionChanged="ListBoxDataClients1_SelectionChanged"
+                     ScrollViewer.VerticalScrollBarVisibility="Disabled"
                      >
                     <ListBox.ItemTemplate>
                         <DataTemplate>
                             <StackPanel Orientation="Horizontal">
-                                <TextBlock  Text="{Binding Name}"/>
-                                <TextBlock  Text="{Binding SurName}"/>
+                                <TextBlock Style="{DynamicResource TextBlockDefult}" Text="{Binding Name}"/>
+                                <TextBlock Style="{DynamicResource TextBlockDefult}" Text="{Binding SurName}"/>
                             </StackPanel>
                         </DataTemplate>
                     </ListBox.ItemTemplate>
@@ -47,15 +48,15 @@
                 </Grid.RowDefinitions>
                 <Grid Grid.Row="0">
                     <ListBox Grid.Column="0" Grid.Row="1"
-                     x:Name="ListBoxClientBankAccounts1"
-                     SelectionMode="Single"
-                             SelectionChanged="ListBoxClientBankAccounts1_SelectionChanged"
+                        x:Name="ListBoxClientBankAccounts1"
+                        SelectionMode="Single"
+                        SelectionChanged="ListBoxClientBankAccounts1_SelectionChanged"
                 >
                         <ListBox.ItemTemplate>
                             <DataTemplate>
                                 <StackPanel Orientation="Horizontal">
-                                    <TextBlock  Text="{Binding Money}"/>
-                                    <TextBlock  Text="{Binding TypeAccount.Name}"/>
+                                    <TextBlock Style="{DynamicResource TextBlockDefult}" Text="{Binding TypeAccount.Name}"/>
+                                    <TextBlock Style="{DynamicResource TextBlockDefult}" Text="{Binding Money}"/>
                                 </StackPanel>
                             </DataTemplate>
                         </ListBox.ItemTemplate>
@@ -66,6 +67,7 @@
                         <Button 
                             Name="ButtonOpenAccount"
                             Content="Открыть счет"
+                            Style="{DynamicResource ButtonDefult}"
                             HorizontalAlignment="Left" 
                             Margin="10,10,0,0"
                             VerticalAlignment="Top"
@@ -73,6 +75,7 @@
                         <Button 
                             Name="ButtonCloseAccount"
                             Content="Закрыть счет"
+                            Style="{DynamicResource ButtonDefult}"
                             HorizontalAlignment="Left" 
                             Margin="10,10,0,0" 
                             VerticalAlignment="Top"
@@ -80,6 +83,7 @@
                         <Button 
                             x:Name="ButtonReplenishmentAccount"
                             Content="Пополнить счет" 
+                            Style="{DynamicResource ButtonDefult}"
                             HorizontalAlignment="Left"
                             Margin="10,10,0,0" 
                             VerticalAlignment="Top"
@@ -88,28 +92,35 @@
                 </Grid>
             </Grid>
             <Grid Grid.Column="2">
-                <StackPanel Orientation="Vertical" VerticalAlignment="Center">
-                    <Button 
+                <Border  BorderBrush="Gray" BorderThickness="0.5">
+                    <StackPanel Orientation="Vertical" VerticalAlignment="Center">
+                        <Button 
                         Height="20"
                         x:Name="ButtonMoneyTransfer"
-                        Content=">>"/>
-                    <Button 
+                        Content=">>"
+                        Style="{DynamicResource ButtonDefult}"
+                        Click="ButtonMoneyTransfer_Click"/>
+                        <Button 
                         Height="20"
                         x:Name="ButtonMoneyTransferCov"
-                        Content="К>>"/>
-                </StackPanel>
+                        Content="К>>"
+                        Style="{DynamicResource ButtonDefult}"
+                        Click="ButtonMoneyTransferCov_Click"/>
+                    </StackPanel>
+                </Border>
             </Grid>
             <Grid Grid.Column="3">
                 <ListBox Grid.Column="0" Grid.Row="1"
                      x:Name="ListBoxDataClients2"
                      SelectionMode="Single"
                      SelectionChanged="ListBoxDataClients2_SelectionChanged"
+                     ScrollViewer.VerticalScrollBarVisibility="Disabled"
                      >
                     <ListBox.ItemTemplate>
                         <DataTemplate>
                             <StackPanel Orientation="Horizontal">
-                                <TextBlock  Text="{Binding Name}"/>
-                                <TextBlock  Text="{Binding SurName}"/>
+                                <TextBlock Style="{DynamicResource TextBlockDefult}" Text="{Binding Name}"/>
+                                <TextBlock Style="{DynamicResource TextBlockDefult}" Text="{Binding SurName}"/>
                             </StackPanel>
                         </DataTemplate>
                     </ListBox.ItemTemplate>
@@ -124,8 +135,8 @@
                     <ListBox.ItemTemplate>
                         <DataTemplate>
                             <StackPanel Orientation="Horizontal">
-                                <TextBlock  Text="{Binding Money}"/>
-                                <TextBlock  Text="{Binding TypeAccount.Name}"/>
+                                <TextBlock Style="{DynamicResource TextBlockDefult}" Text="{Binding TypeAccount.Name}"/>
+                                <TextBlock Style="{DynamicResource TextBlockDefult}" Text="{Binding Money}"/>
                             </StackPanel>
                         </DataTemplate>
                     </ListBox.ItemTemplate>

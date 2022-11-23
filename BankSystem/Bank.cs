@@ -21,14 +21,14 @@ namespace HomeWork13._5.BankSystem
         public static bool OpenNewBankAccount<T>(Client client, T bankAccount)
             where T : BankAccount
         {
+            if (client == null || bankAccount == null)
+                return false;
             if (client.BankAccounts.Count <= 2)
             {
                 foreach (var account in client.BankAccounts)
                     if (account.GetType().Equals(bankAccount.GetType()))
                         return false;
                 client.BankAccounts.Add(bankAccount);
-                if (client is BankClient bankClient)
-                    bankClient.OnPropertyChanged("BankAccounts");
                 return true;
             }
             return false;
@@ -43,14 +43,14 @@ namespace HomeWork13._5.BankSystem
         public static bool CloseBankAccount<T>(Client client, T bankAccount)
             where T : BankAccount
         {
+            if (client == null || bankAccount == null)
+                return false;
             int indexAccount = client.BankAccounts.IndexOf(bankAccount);
             if (indexAccount != -1)
             {
                 if (client.BankAccounts[indexAccount].Money == 0)
                 {
                     client.BankAccounts.RemoveAt(indexAccount);
-                    if (client is BankClient bankClient)
-                        bankClient.OnPropertyChanged("BankAccounts");
                     return true;
                 }
             }
@@ -71,6 +71,8 @@ namespace HomeWork13._5.BankSystem
             where T : BankAccount
             where M : BankAccount
         {
+            if (sender == null || senderAccount == null || recipient == null || recipientAccount == null)
+                return false;
             int indexSenderAccount = sender.BankAccounts.IndexOf(senderAccount);
             int indexRecipientAccount = recipient.BankAccounts.IndexOf(recipientAccount);
             if (indexSenderAccount == -1 || indexRecipientAccount == -1)
@@ -81,10 +83,6 @@ namespace HomeWork13._5.BankSystem
             {
                 if (recipient.BankAccounts[indexRecipientAccount].AddMoney(value))
                 {
-                    if (sender is BankClient bankClient1)
-                        bankClient1.OnPropertyChanged("BankAccounts");
-                    if (recipient is BankClient bankClient2)
-                        bankClient2.OnPropertyChanged("BankAccounts");
                     return true;
                 }
                 else
@@ -104,6 +102,8 @@ namespace HomeWork13._5.BankSystem
         /// <returns></returns>
         public static bool ReplenishmentByTypeAccount(Client client, Type type, double value)
         {
+            if (client == null)
+                return false;
             IReplenishment<BankAccount> account;
             foreach (var bankAccount in client.BankAccounts)
                 if (bankAccount.GetType().Equals(type))
@@ -113,11 +113,7 @@ namespace HomeWork13._5.BankSystem
                     account.Replenishment(value);
 
                     if (money != bankAccount.Money)
-                    {
-                        if (client is BankClient bankClient)
-                            bankClient.OnPropertyChanged("BankAccounts");
                         return true;
-                    }
                     else return false;
                 }
             return false;
@@ -133,6 +129,8 @@ namespace HomeWork13._5.BankSystem
         /// <returns></returns>
         public static bool MoneyTransferCov(Client sender, BankAccount senderAccount, Client recipient, BankAccount recipientAccount, double value)
         {
+            if (sender == null || senderAccount == null || recipient == null || recipientAccount == null)
+                return false;
             int indexSenderAccount = sender.BankAccounts.IndexOf(senderAccount);
             int indexRecipientAccount = recipient.BankAccounts.IndexOf(recipientAccount);
             if (indexSenderAccount == -1 || indexRecipientAccount == -1)
@@ -145,13 +143,7 @@ namespace HomeWork13._5.BankSystem
             transfer.MoneyTransferCov(recipient, recipientAccount, value);
 
             if (beginMoney != senderAccount.Money)
-            {
-                if (sender is BankClient bankClient1)
-                    bankClient1.OnPropertyChanged("BankAccounts");
-                if (recipient is BankClient bankClient2)
-                    bankClient2.OnPropertyChanged("BankAccounts");
                 return true;
-            }
             else return false;
         }
     }

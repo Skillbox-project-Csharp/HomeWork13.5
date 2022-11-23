@@ -27,12 +27,26 @@ namespace HomeWork13._5.BankSystem.BankAccounts
 
         public virtual bool AddMoney(double value)
         {
-            return true;
+            if (value <= 0)
+                return false;
+            if (Money + value > 0)
+            {
+                _money += value;
+                return true;
+            }
+            return false;
         }
 
         public virtual bool SubMoney(double value)
         {
-            return true;
+            if (value <= 0)
+                return false;
+            if (Money - value >= 0)
+            {
+                _money -= value;
+                return true;
+            }
+            return false;
         }
         public bool Equals(BankAccount other)
         {

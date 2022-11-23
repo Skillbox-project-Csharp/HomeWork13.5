@@ -2,22 +2,10 @@
 using HomeWork13._5.BankSystem.BankAccounts;
 using HomeWork13._5.BankSystem.BankAccounts.Interfaces;
 using HomeWork13._5.BankSystem.BankClients;
-using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
+
 
 namespace HomeWork13._5
 {
@@ -34,18 +22,31 @@ namespace HomeWork13._5
         public MainWindow()
         {
             InitializeComponent();
-            BankClients = new ObservableCollection<Client>();
-            for (int i = 0; i < 25; i++)
+            BankClients = new ObservableCollection<Client>
             {
-                BankClient client = new BankClient($"Name{i}", $"SurName{i}", $"Patronymic{i}");
-                Bank.OpenNewBankAccount(client, new DepositAccount(Guid.NewGuid(), i));
-                BankClients.Add(client);
-
-            }
+                new BankClient{Name ="Анна", SurName="Петровна", Patronymic="Игоревна"},
+                new BankClient{Name ="Павел", SurName="Вересов", Patronymic="Александрович"},
+                new BankClient{Name ="Андрей", SurName="Краснов", Patronymic=""}
+            };
+            GeneratingAccounts(BankClients);
             ListBoxDataClients1.ItemsSource = BankClients;
             ListBoxDataClients2.ItemsSource = BankClients;
         }
-
+        private void GeneratingAccounts(ObservableCollection<Client> clients)
+        {
+            for (int i = 0; i < clients.Count; i++)
+            {
+                BankAccount bankAccount = new BankAccount();
+                DepositAccount depositAccount = new DepositAccount();
+                NoDepositAccount noDepositAccount = new NoDepositAccount();
+                bankAccount.AddMoney(i);
+                depositAccount.AddMoney(i);
+                noDepositAccount.AddMoney(i);
+                Bank.OpenNewBankAccount(clients[i], bankAccount);
+                Bank.OpenNewBankAccount(clients[i], depositAccount);
+                Bank.OpenNewBankAccount(clients[i], noDepositAccount);
+            }
+        }
         private void ListBoxDataClients1_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
 
@@ -68,32 +69,88 @@ namespace HomeWork13._5
 
         private void ListBoxClientBankAccounts1_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            if(ListBoxClientBankAccounts1.SelectedItem is BankAccount bankAccount)
+            if (ListBoxClientBankAccounts1.SelectedItem is BankAccount bankAccount)
                 SelectedBankAccount1 = bankAccount;
         }
 
         private void ListBoxClientBankAccounts2_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            if(ListBoxClientBankAccounts2.SelectedItem is BankAccount bankAccount)
+            if (ListBoxClientBankAccounts2.SelectedItem is BankAccount bankAccount)
                 SelectedBankAccount2 = bankAccount;
         }
 
         private void ButtonCloseAccount_Click(object sender, RoutedEventArgs e)
         {
-            if(SelectedBankClient1 != null && SelectedBankAccount1 != null)
-                    Bank.CloseBankAccount(SelectedBankClient1, SelectedBankAccount1);
+            if (SelectedBankClient1 != null && SelectedBankAccount1 != null)
+            {
+                Bank.CloseBankAccount(SelectedBankClient1, SelectedBankAccount1);
+                ListBoxClientBankAccounts1.Items.Refresh();
+                ListBoxClientBankAccounts2.Items.Refresh();
+            }
         }
 
         private void ButtonOpenAccount_Click(object sender, RoutedEventArgs e)
         {
-
+            if (SelectedBankClient1 != null)
+            {
+                OpenAccountWindow openAccountWindow = new OpenAccountWindow();
+                if (openAccountWindow.ShowDialog() == true)
+                {
+                    Bank.OpenNewBankAccount(SelectedBankClient1, openAccountWindow.GetBankAccount);
+                }
+                ListBoxClientBankAccounts1.Items.Refresh();
+                ListBoxClientBankAccounts2.Items.Refresh();
+            }
         }
 
         private void ButtonReplenishmentAccount_Click(object sender, RoutedEventArgs e)
         {
-
+            if (SelectedBankClient1 != null && SelectedBankAccount1 != null)
+            {
+                ReplenishmentAccount replenishmentWindow = new ReplenishmentAccount("Пополнить счет на");
+                if (replenishmentWindow.ShowDialog() == true)
+                {
+                    Bank.ReplenishmentByTypeAccount(SelectedBankClient1, SelectedBankAccount1.TypeAccount, replenishmentWindow.AmountAddMoney);
+                }
+                ListBoxClientBankAccounts1.Items.Refresh();
+                ListBoxClientBankAccounts2.Items.Refresh();
+            }
         }
 
+        private void ButtonMoneyTransfer_Click(object sender, RoutedEventArgs e)
+        {
+            ReplenishmentAccount replenishmentWindow = new ReplenishmentAccount("Сумма перевода");
+            if (replenishmentWindow.ShowDialog() == true)
+            {
+                Bank.MoneyTransfer
+                    (
+                    SelectedBankClient1,
+                    SelectedBankAccount1,
+                    SelectedBankClient2,
+                    SelectedBankAccount2,
+                    replenishmentWindow.AmountAddMoney
+                    );
+                ListBoxClientBankAccounts1.Items.Refresh();
+                ListBoxClientBankAccounts2.Items.Refresh();
+            }
+        }
 
+        private void ButtonMoneyTransferCov_Click(object sender, RoutedEventArgs e)
+        {
+            ReplenishmentAccount replenishmentWindow = new ReplenishmentAccount("Сумма перевода");
+            if (replenishmentWindow.ShowDialog() == true)
+            {
+                Bank.MoneyTransferCov
+                    (
+                    SelectedBankClient1,
+                    SelectedBankAccount1,
+                    SelectedBankClient2,
+                    SelectedBankAccount2,
+                    replenishmentWindow.AmountAddMoney
+                    );
+                ListBoxClientBankAccounts1.Items.Refresh();
+                ListBoxClientBankAccounts2.Items.Refresh();
+            }
+        }
     }
 }
